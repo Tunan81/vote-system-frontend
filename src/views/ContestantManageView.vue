@@ -56,24 +56,16 @@ watchEffect(() => {
 
 const columns = [
   {
-    title: "用户账号",
-    dataIndex: "userAccount",
+    title: "选手姓名",
+    dataIndex: "contestantName",
   },
   {
-    title: "用户昵称",
-    dataIndex: "userName",
+    title: "歌曲名称",
+    dataIndex: "songName",
   },
   {
-    title: "用户简介",
-    dataIndex: "userProfile",
-  },
-  {
-    title: "用户角色",
-    dataIndex: "userRole",
-  },
-  {
-    title: "创建时间",
-    dataIndex: "createTime",
+    title: "投票数",
+    dataIndex: "score",
   },
   {
     title: "操作",
@@ -158,11 +150,11 @@ const onPageChange = (page: number) => {
 
 <template>
   <div id="contestantManage">
-    <a-card title="用户管理">
+    <a-card title="选手管理">
       <template #extra>
         <a-input-search
           :style="{ width: '300px' }"
-          placeholder="请输入用户账号"
+          placeholder="请输入选手名称"
           search-button
           v-model="searchParams.userAccount"
           @search="doSubmit"

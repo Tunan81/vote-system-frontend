@@ -92,6 +92,7 @@ const columns = [
 const router = useRouter();
 
 const visible = ref(false);
+const uploadVisible = ref(false);
 const isAdding = ref(true); // 默认为新增操作
 const form = ref({
   competitionInfo: "",
@@ -143,11 +144,19 @@ const handleOk = async () => {
 };
 
 const onTimeSelect = (dateString: any, date: any) => {
-  console.log("onSelect", dateString, date);
+  form.value = {
+    ...form.value,
+    startTime: dateString[0],
+    endTime: dateString[1],
+  };
 };
 
 const onTimeChange = (dateString: any, date: any) => {
-  console.log("onChange", dateString, date);
+  form.value = {
+    ...form.value,
+    startTime: dateString[0],
+    endTime: dateString[1],
+  };
 };
 
 const handleCancel = () => {
@@ -185,6 +194,10 @@ const onPageChange = (page: number) => {
 
 const doSelectContestant = () => {
   router.push("/contestantManage");
+};
+
+const doUpload = () => {
+  uploadVisible.value = true;
 };
 </script>
 
@@ -231,10 +244,12 @@ const doSelectContestant = () => {
         </template>
         <template #optional="{ record }">
           <a-space>
-            <a-button type="dashed" status="success">导入选手信息</a-button>
+            <a-button type="dashed" status="success" @click="doUpload"
+              >导入选手信息
+            </a-button>
             <a-button type="dashed" status="success" @click="doSelectContestant"
-              >查看选手列表</a-button
-            >
+              >查看选手列表
+            </a-button>
             <a-button type="primary" @click="doUpdate(record)"
               >修改比赛信息
             </a-button>
@@ -251,7 +266,7 @@ const doSelectContestant = () => {
     </a-card>
   </div>
   <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
-    <template #title>{{ isAdding ? "添加" : "修改" }}比赛</template>
+    <template #title>{{ isAdding ? "新增" : "修改" }}比赛</template>
     <a-form :model="form">
       <a-form-item label="比赛名称" field="competitionName">
         <a-input
@@ -266,10 +281,23 @@ const doSelectContestant = () => {
           class="input-demo"
         />
       </a-form-item>
+      <a-form-item label="比赛简介" field="competitionInfo">
+        <a-textarea
+          v-model="form.competitionInfo"
+          placeholder="请输入比赛简介"
+          :max-length="{ length: 256, errorOnly: true }"
+          allow-clear
+          show-word-limit
+        />
+      </a-form-item>
       <a-form-item label="起止时间" field="startTime">
         <a-range-picker @change="onTimeChange" @select="onTimeSelect" />
       </a-form-item>
     </a-form>
+  </a-modal>
+  <a-modal v-model:visible="uploadVisible">
+    <template #title>导入选手信息</template>
+    <a-upload draggable action="/" />
   </a-modal>
 </template>
 
