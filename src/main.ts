@@ -7,6 +7,4 @@ import { createPinia } from "pinia";
 import ArcoVue from "@arco-design/web-vue";
 import "@arco-design/web-vue/dist/arco.css";
 
-const pinia = createPinia();
-
-createApp(App).use(ArcoVue).use(pinia).use(router).mount("#app");
+createApp(App).use(ArcoVue).use(createPinia()).use(router).mount("#app");

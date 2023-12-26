@@ -32,7 +32,7 @@
               :size="36"
               :style="{ marginRight: '8px', cursor: 'pointer' }"
             >
-              <img alt="avatar" src="@/assets/fufu.jpg" />
+              <img alt="avatar" src="../assets/fufu.jpg" />
               {{ loginUser?.userName ?? "未登录" }}
             </a-avatar>
             <a>{{ loginUser?.userName }}</a>
@@ -80,6 +80,7 @@ import { computed, ref } from "vue";
 import checkAccess from "@/access/checkAccess";
 import { useUserStore } from "@/store/user";
 import { storeToRefs } from "pinia";
+import { UserControllerService } from "@/generated";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -129,7 +130,7 @@ const doRegister = () => {
 
 // 退出登录
 const handleLogout = () => {
-  //UserControllerService.userLogoutUsingPost();
+  UserControllerService.userLogoutUsingPost();
   location.reload();
 };
 </script>

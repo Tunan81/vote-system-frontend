@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import GlobalHeader from "@/layouts/GlobalHeader.vue";
+import GlobalHeader from "@/components/GlobalHeader.vue";
 
 export default {
   components: {

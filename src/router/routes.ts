@@ -6,7 +6,6 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: "/user",
     name: "用户",
-    //component: () => import("@/layouts/UserLayout.vue"),
     children: [
       {
         path: "/user/login",
@@ -32,17 +31,42 @@ export const routes: Array<RouteRecordRaw> = [
       layout: BasicLayout,
     },
   },
-  // {
-  //   path: "/404",
-  //   name: "404",
-  //   component: () => import("@/views/notFound/NotFoundView.vue"),
-  //   meta: {
-  //     hideInMenu: true,
-  //     layout: BasicLayout,
-  //   },
-  // },
-  // {
-  //   path: "/:pathMatch(.*)", // 匹配所有路由
-  //   redirect: "/404",
-  // },
+  {
+    path: "/userManage",
+    name: "用户管理",
+    component: () => import("@/views/user/UserManageView.vue"),
+    meta: {
+      layout: BasicLayout,
+    },
+  },
+  {
+    path: "/competitionManage",
+    name: "比赛管理",
+    component: () => import("@/views/CompetitionManageView.vue"),
+    meta: {
+      layout: BasicLayout,
+    },
+  },
+  {
+    path: "/contestantManage",
+    name: "选手管理",
+    component: () => import("@/views/ContestantManageView.vue"),
+    meta: {
+      hideInMenu: true,
+      layout: BasicLayout,
+    },
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("@/views/notFound/notFound.vue"),
+    meta: {
+      hideInMenu: true,
+      layout: BasicLayout,
+    },
+  },
+  {
+    path: "/:pathMatch(.*)", // 匹配所有路由
+    redirect: "/404",
+  },
 ];
