@@ -10,6 +10,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 export type { CompetitionQueryRequest } from './models/CompetitionQueryRequest';
 export type { CompetitionReq } from './models/CompetitionReq';
 export type { CompetitionRes } from './models/CompetitionRes';
+export type { CompetitionUpdateDTO } from './models/CompetitionUpdateDTO';
 export type { ContestantInfoQueryRequest } from './models/ContestantInfoQueryRequest';
 export type { ContestantInfoReq } from './models/ContestantInfoReq';
 export type { ContestantInfoRes } from './models/ContestantInfoRes';

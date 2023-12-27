@@ -245,7 +245,18 @@ const customRequest = (option: {
 // endregion
 
 const doChangeMatch = (record: any) => {
-  console.log(record);
+  const req: CompetitionReq = {
+    ...record,
+  };
+  console.log(req);
+  CompetitionControllerService.updateCompetitionUsingPost(req).then((res) => {
+    if (res.code === 0) {
+      message.success("修改成功");
+      loadData();
+    } else {
+      message.error("修改失败" + res.message);
+    }
+  });
 };
 
 const doSelectMatch = (record: any) => {

@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { CompetitionQueryRequest } from '../models/CompetitionQueryRequest';
 import type { CompetitionReq } from '../models/CompetitionReq';
+import type { CompetitionUpdateDTO } from '../models/CompetitionUpdateDTO';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { Result_boolean_ } from '../models/Result_boolean_';
 import type { Result_long_ } from '../models/Result_long_';
@@ -73,6 +74,28 @@ competitionQueryRequest: CompetitionQueryRequest,
             method: 'POST',
             url: '/api/competition/list/page',
             body: competitionQueryRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * updateCompetition
+     * @param competitionUpdateDto competitionUpdateDTO
+     * @returns Result_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static updateCompetitionUsingPost(
+competitionUpdateDto: CompetitionUpdateDTO,
+): CancelablePromise<Result_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/competition/update',
+            body: competitionUpdateDto,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
