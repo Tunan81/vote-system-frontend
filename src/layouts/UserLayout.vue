@@ -5,7 +5,7 @@
         <a-space>
           <img class="logo" src="../assets/logo.png" alt="logo" />
           <div>
-            <h1>在线编程学习平台</h1>
+            <h1>在线投票系统</h1>
           </div>
         </a-space>
       </a-layout-header>

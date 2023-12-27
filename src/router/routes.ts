@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
 import UserLayout from "../layouts/UserLayout.vue";
 import BasicLayout from "../layouts/BasicLayout.vue";
+import MatchLayout from "@/layouts/MatchLayout.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -54,6 +55,15 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       hideInMenu: true,
       layout: BasicLayout,
+    },
+  },
+  {
+    path: "/matchInfo",
+    name: "对战信息",
+    component: () => import("@/views/MatchInfo.vue"),
+    meta: {
+      hideInMenu: true,
+      layout: MatchLayout,
     },
   },
   {

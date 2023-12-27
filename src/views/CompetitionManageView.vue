@@ -81,7 +81,7 @@ const columns = [
   },
   {
     title: "是否开始比赛对战",
-    dataIndex: "isMatchOpen",
+    slotName: "isMatchOpen",
   },
   {
     title: "操作",
@@ -192,12 +192,69 @@ const onPageChange = (page: number) => {
   };
 };
 
-const doSelectContestant = () => {
-  router.push("/contestantManage");
+const doSelectContestant = (competition: any) => {
+  console.log(competition);
+  router.push({
+    path: "/contestantManage",
+    query: {
+      competitionId: competition.competitionId,
+    },
+  });
 };
 
-const doUpload = () => {
+// region 文件上传
+const competitionId = ref() as any;
+const doUpload = (record: any) => {
   uploadVisible.value = true;
+  competitionId.value = record.competitionId;
+};
+const customRequest = (option: {
+  onProgress: any;
+  onError: any;
+  onSuccess: any;
+  fileItem: any;
+  name: any;
+}) => {
+  const { onProgress, onError, onSuccess, fileItem, name } = option;
+  const xhr = new XMLHttpRequest();
+  if (xhr.upload) {
+    xhr.upload.onprogress = function (event) {
+      let percent;
+      if (event.total > 0) {
+        // 0 ~ 1
+        percent = event.loaded / event.total;
+      }
+      onProgress(percent, event);
+    };
+  }
+  xhr.onerror = function error(e) {
+    onError(e);
+  };
+  xhr.onload = function onload() {
+    if (xhr.status < 200 || xhr.status >= 300) {
+      return onError(xhr.responseText);
+    }
+    onSuccess(xhr.response);
+  };
+  const formData = new FormData();
+  formData.append(name || "file", fileItem.file);
+  formData.append("competitionId", competitionId.value);
+  xhr.open("post", "http://localhost:8101/api/competition/upload", true);
+  xhr.send(formData);
+};
+// endregion
+
+const doChangeMatch = (record: any) => {
+  console.log(record);
+};
+
+const doSelectMatch = (record: any) => {
+  router.push({
+    path: "/matchInfo",
+    query: {
+      competitionId: record.competitionId,
+    },
+  });
 };
 </script>
 
@@ -239,19 +296,28 @@ const doUpload = () => {
         }"
         @page-change="onPageChange"
       >
-        <template #isVotingOpen="{ record }">
-          <a-switch @click="doChangeVoting(record)" />
+        <template #isMatchOpen="{ record }">
+          <a-switch
+            v-model="record.isMatchOpen"
+            @click="doChangeMatch(record)"
+          />
         </template>
         <template #optional="{ record }">
           <a-space>
-            <a-button type="dashed" status="success" @click="doUpload"
+            <a-button type="dashed" status="success" @click="doUpload(record)"
               >导入选手信息
             </a-button>
-            <a-button type="dashed" status="success" @click="doSelectContestant"
+            <a-button
+              type="dashed"
+              status="success"
+              @click="doSelectContestant(record)"
               >查看选手列表
             </a-button>
             <a-button type="primary" @click="doUpdate(record)"
               >修改比赛信息
+            </a-button>
+            <a-button type="primary" @click="doSelectMatch(record)"
+              >查看对战信息
             </a-button>
             <a-popconfirm
               content="确认删除吗?"
@@ -297,7 +363,7 @@ const doUpload = () => {
   </a-modal>
   <a-modal v-model:visible="uploadVisible">
     <template #title>导入选手信息</template>
-    <a-upload draggable action="/" />
+    <a-upload ref="upload" draggable :custom-request="customRequest" />
   </a-modal>
 </template>
 

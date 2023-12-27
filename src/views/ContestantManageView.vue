@@ -2,11 +2,18 @@
 import { ref, watchEffect } from "vue";
 import message from "@arco-design/web-vue/es/message";
 import { useRouter } from "vue-router";
-import { User, UserControllerService } from "@/generated";
+import {
+  ContestantInfoControllerService,
+  User,
+  UserControllerService,
+} from "@/generated";
 import { Message } from "@arco-design/web-vue";
 
 const dataList = ref([]);
 const total = ref(0);
+const router = useRouter();
+
+const competitionId = router.currentRoute.value.query.competitionId;
 
 /**
  * 查询参数
@@ -14,7 +21,8 @@ const total = ref(0);
 const searchParams = ref({
   pageSize: 10,
   pageNumber: 1,
-  userAccount: "",
+  contestantName: "",
+  competitionId: competitionId,
 });
 
 const doSubmit = () => {
@@ -28,7 +36,8 @@ const doReset = () => {
   searchParams.value = {
     pageSize: 10,
     pageNumber: 1,
-    userAccount: "",
+    contestantName: "",
+    competitionId: competitionId,
   };
 };
 
@@ -36,9 +45,10 @@ const doReset = () => {
  * 加载数据
  */
 const loadData = async () => {
-  const res = await UserControllerService.listUserByPageUsingPost(
-    searchParams.value
-  );
+  const res =
+    await ContestantInfoControllerService.listContestantInfoPageUsingPost(
+      searchParams.value
+    );
   if (res.code === 0) {
     dataList.value = res.data.records;
     total.value = parseInt(res.data.totalRow);
@@ -64,7 +74,7 @@ const columns = [
     dataIndex: "songName",
   },
   {
-    title: "投票数",
+    title: "得票数",
     dataIndex: "score",
   },
   {
@@ -73,21 +83,18 @@ const columns = [
   },
 ];
 
-const router = useRouter();
-
 const visible = ref(false);
 const isAdding = ref(true); // 默认为新增操作
 const value = ref();
 const form = ref({
-  userName: "",
-  userAccount: "",
-  userRole: "",
+  contestantName: "",
+  songName: "",
+  competitionId: competitionId as any,
 });
 
 const doAdd = () => {
   isAdding.value = true; // 将操作类型设置为新增
   visible.value = true; // 显示弹框
-  console.log(111);
 };
 
 const doUpdate = (record: any) => {
@@ -98,7 +105,10 @@ const doUpdate = (record: any) => {
 
 const handleOk = async () => {
   if (isAdding.value) {
-    const res = await UserControllerService.addUserUsingPost(form.value);
+    const res =
+      await ContestantInfoControllerService.addContestantInfoUsingPost(
+        form.value
+      );
     if (res.code === 0) {
       Message.success("添加成功");
       loadData();
@@ -111,9 +121,9 @@ const handleOk = async () => {
 
   // 清空表单
   form.value = {
-    userName: "",
-    userAccount: "",
-    userRole: "",
+    contestantName: "",
+    songName: "",
+    competitionId: competitionId as any,
   };
   visible.value = false;
 };
@@ -121,17 +131,18 @@ const handleOk = async () => {
 const handleCancel = () => {
   // 清空表单
   form.value = {
-    userName: "",
-    userAccount: "",
-    userRole: "",
+    contestantName: "",
+    songName: "",
+    competitionId: competitionId as any,
   };
   visible.value = false;
 };
 
-const doDelete = async (user: User) => {
-  const res = await UserControllerService.deleteUserUsingPost({
-    id: user.id,
-  });
+const doDelete = async (record: any) => {
+  const res =
+    await ContestantInfoControllerService.deleteContestantInfoUsingPost({
+      id: record.contestantId,
+    });
   if (res.code === 0) {
     message.success("删除成功");
     loadData();
@@ -156,7 +167,7 @@ const onPageChange = (page: number) => {
           :style="{ width: '300px' }"
           placeholder="请输入选手名称"
           search-button
-          v-model="searchParams.userAccount"
+          v-model="searchParams.contestantName"
           @search="doSubmit"
         >
           <template #button-icon>
@@ -172,7 +183,7 @@ const onPageChange = (page: number) => {
           status="success"
           @click="doAdd"
           style="margin-left: 10px"
-          >新增
+          >添加选手
         </a-button>
       </template>
       <a-table
@@ -201,6 +212,23 @@ const onPageChange = (page: number) => {
       </a-table>
     </a-card>
   </div>
+  <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
+    <template #title>{{ isAdding ? "添加" : "修改" }}选手信息</template>
+    <a-form :model="form">
+      <a-form-item label="选手姓名" field="contestantName">
+        <a-input
+          v-model="form.contestantName"
+          placeholder="请输入选手名称"
+        ></a-input>
+      </a-form-item>
+      <a-form-item label="歌曲名称" field="songName">
+        <a-input
+          v-model="form.songName"
+          placeholder="请输入选手选择的歌曲"
+        ></a-input>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <style scoped>

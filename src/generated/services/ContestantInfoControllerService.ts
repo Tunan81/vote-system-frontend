@@ -2,33 +2,33 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CompetitionQueryRequest } from '../models/CompetitionQueryRequest';
-import type { CompetitionReq } from '../models/CompetitionReq';
+import type { ContestantInfoQueryRequest } from '../models/ContestantInfoQueryRequest';
+import type { ContestantInfoReq } from '../models/ContestantInfoReq';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { Result_boolean_ } from '../models/Result_boolean_';
 import type { Result_long_ } from '../models/Result_long_';
-import type { Result_Page_Competition_ } from '../models/Result_Page_Competition_';
+import type { Result_Page_ContestantInfo_ } from '../models/Result_Page_ContestantInfo_';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class CompetitionControllerService {
+export class ContestantInfoControllerService {
 
     /**
-     * addCompetition
-     * @param competition competition
+     * addContestantInfo
+     * @param contestantInfo contestantInfo
      * @returns Result_long_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static addCompetitionUsingPost(
-competition: CompetitionReq,
+    public static addContestantInfoUsingPost(
+contestantInfo: ContestantInfoReq,
 ): CancelablePromise<Result_long_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/competition/add',
-            body: competition,
+            url: '/api/contestantInfo/add',
+            body: contestantInfo,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -38,18 +38,18 @@ competition: CompetitionReq,
     }
 
     /**
-     * deleteCompetition
+     * deleteContestantInfo
      * @param deleteRequest deleteRequest
      * @returns Result_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static deleteCompetitionUsingPost(
+    public static deleteContestantInfoUsingPost(
 deleteRequest: DeleteRequest,
 ): CancelablePromise<Result_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/competition/delete',
+            url: '/api/contestantInfo/delete',
             body: deleteRequest,
             errors: {
                 401: `Unauthorized`,
@@ -60,46 +60,19 @@ deleteRequest: DeleteRequest,
     }
 
     /**
-     * page
-     * @param competitionQueryRequest competitionQueryRequest
-     * @returns Result_Page_Competition_ OK
+     * listContestantInfoPage
+     * @param contestantInfoQueryRequest contestantInfoQueryRequest
+     * @returns Result_Page_ContestantInfo_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static pageUsingPost(
-competitionQueryRequest: CompetitionQueryRequest,
-): CancelablePromise<Result_Page_Competition_ | any> {
+    public static listContestantInfoPageUsingPost(
+contestantInfoQueryRequest: ContestantInfoQueryRequest,
+): CancelablePromise<Result_Page_ContestantInfo_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/competition/list/page',
-            body: competitionQueryRequest,
-            errors: {
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                404: `Not Found`,
-            },
-        });
-    }
-
-    /**
-     * upload
-     * @param competitionId competitionId
-     * @param file file
-     * @returns Result_boolean_ OK
-     * @returns any Created
-     * @throws ApiError
-     */
-    public static uploadUsingPost(
-competitionId?: number,
-file?: Blob,
-): CancelablePromise<Result_boolean_ | any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/competition/upload',
-            query: {
-                'competitionId': competitionId,
-            },
-            body: file,
+            url: '/api/contestantInfo/list/page',
+            body: contestantInfoQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

@@ -5,11 +5,10 @@
 <script setup lang="ts"></script>
 <style>
 #home {
-  margin: 10px 10px 10px 10px;
   background: url("../assets/shouye.jpg") no-repeat;
-  min-height: 100vh;
-  min-width: 100vh;
-  overflow: hidden;
-  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-size: 98% 100%;
 }
 </style>
