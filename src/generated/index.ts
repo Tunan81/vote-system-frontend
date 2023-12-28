@@ -7,6 +7,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { CompetitionDTO } from './models/CompetitionDTO';
 export type { CompetitionQueryRequest } from './models/CompetitionQueryRequest';
 export type { CompetitionReq } from './models/CompetitionReq';
 export type { CompetitionRes } from './models/CompetitionRes';
@@ -24,6 +25,7 @@ export type { Page_MatchInfoVO_ } from './models/Page_MatchInfoVO_';
 export type { Page_User_ } from './models/Page_User_';
 export type { Page_UserVO_ } from './models/Page_UserVO_';
 export type { Result_boolean_ } from './models/Result_boolean_';
+export type { Result_List_CompetitionDTO_ } from './models/Result_List_CompetitionDTO_';
 export type { Result_LoginUserVO_ } from './models/Result_LoginUserVO_';
 export type { Result_long_ } from './models/Result_long_';
 export type { Result_Page_Competition_ } from './models/Result_Page_Competition_';

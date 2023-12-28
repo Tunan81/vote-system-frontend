@@ -5,7 +5,7 @@ import { onMounted, ref } from "vue";
 import { useUserStore } from "@/store/user";
 import { storeToRefs } from "pinia";
 import { MatchInfoControllerService, Voting } from "@/generated";
-import { VotingControllerService } from "../../generated";
+import { VotingControllerService } from "../generated";
 import access_Enum from "@/access/accessEnum";
 
 const router = useRouter();
@@ -65,7 +65,7 @@ const doVote2 = async (contestantId: any, index: number) => {
     userId: loginUser.value.userId as any,
   } as Voting;
   const res = await VotingControllerService.addVoteUsingPost({
-    voting: form,
+    ...form,
   });
   if (res.code === 0) {
     (dataList.value as any[])[index].voted = true;

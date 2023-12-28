@@ -7,6 +7,7 @@ import type { CompetitionReq } from '../models/CompetitionReq';
 import type { CompetitionUpdateDTO } from '../models/CompetitionUpdateDTO';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { Result_boolean_ } from '../models/Result_boolean_';
+import type { Result_List_CompetitionDTO_ } from '../models/Result_List_CompetitionDTO_';
 import type { Result_long_ } from '../models/Result_long_';
 import type { Result_Page_Competition_ } from '../models/Result_Page_Competition_';
 
@@ -52,6 +53,24 @@ deleteRequest: DeleteRequest,
             method: 'POST',
             url: '/api/competition/delete',
             body: deleteRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+
+    /**
+     * list
+     * @returns Result_List_CompetitionDTO_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static listUsingPost(): CancelablePromise<Result_List_CompetitionDTO_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/competition/list',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
