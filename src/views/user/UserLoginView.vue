@@ -1,6 +1,5 @@
 <template>
   <div class="userLoginView">
-    <h2 style="margin-bottom: 16px">用户登录</h2>
     <a-form
       style="max-width: 400px; margin: 0 auto"
       auto-label-width
@@ -43,7 +42,7 @@ import { useUserStore } from "@/store/user";
 
 const router = useRouter();
 const userStore = useUserStore();
-const getUser = userStore.getLoginUser;
+const { getLoginUser } = userStore;
 
 /**
  * 表单数据
@@ -60,7 +59,7 @@ const handleSubmit = async () => {
   const res = await UserControllerService.userLoginUsingPost(form);
   if (res.code === 0) {
     console.log(3);
-    await getUser();
+    await getLoginUser();
     // 登录成功，跳转到首页
     await router.push({
       path: "/",

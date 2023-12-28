@@ -2,6 +2,7 @@ import { RouteRecordRaw } from "vue-router";
 import UserLayout from "../layouts/UserLayout.vue";
 import BasicLayout from "../layouts/BasicLayout.vue";
 import MatchLayout from "@/layouts/MatchLayout.vue";
+import AccessEnum from "@/access/accessEnum";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -38,6 +39,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/user/UserManageView.vue"),
     meta: {
       layout: BasicLayout,
+      access: AccessEnum.ADMIN,
     },
   },
   {
@@ -46,6 +48,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/CompetitionManageView.vue"),
     meta: {
       layout: BasicLayout,
+      access: AccessEnum.ADMIN,
     },
   },
   {
@@ -55,6 +58,7 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       hideInMenu: true,
       layout: BasicLayout,
+      access: AccessEnum.ADMIN,
     },
   },
   {

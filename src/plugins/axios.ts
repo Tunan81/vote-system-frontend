@@ -1,26 +1,17 @@
-// 添加请求拦截器
 import axios from "axios";
 import { OpenAPI } from "@/generated";
 
-// 携带凭证
 OpenAPI.WITH_CREDENTIALS = true;
 const baseUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8101"
-    : "http://124.222.173.171:8101";
-
-// const baseUrl =
-//   process.env.NODE_ENV === "development"
-//     ? "http://124.222.173.171:8101"
-//     : "http://124.222.173.171:8101";
-
+    : "http://localhost:8101";
 OpenAPI.BASE = baseUrl;
 console.log("当前环境：", process.env.NODE_ENV, "请求地址", baseUrl);
 
 /**
  * 全局响应拦截器
  */
-
 axios.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么

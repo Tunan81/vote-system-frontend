@@ -33,6 +33,7 @@ export type { Result_Page_User_ } from './models/Result_Page_User_';
 export type { Result_Page_UserVO_ } from './models/Result_Page_UserVO_';
 export type { Result_User_ } from './models/Result_User_';
 export type { Result_UserVO_ } from './models/Result_UserVO_';
+export type { Timestamp } from './models/Timestamp';
 export type { TimestampReq } from './models/TimestampReq';
 export type { TimestampRes } from './models/TimestampRes';
 export type { User } from './models/User';
@@ -43,8 +44,10 @@ export type { UserRegisterRequest } from './models/UserRegisterRequest';
 export type { UserUpdateMyRequest } from './models/UserUpdateMyRequest';
 export type { UserUpdateRequest } from './models/UserUpdateRequest';
 export type { UserVO } from './models/UserVO';
+export type { Voting } from './models/Voting';
 
 export { CompetitionControllerService } from './services/CompetitionControllerService';
 export { ContestantInfoControllerService } from './services/ContestantInfoControllerService';
 export { MatchInfoControllerService } from './services/MatchInfoControllerService';
 export { UserControllerService } from './services/UserControllerService';
+export { VotingControllerService } from './services/VotingControllerService';

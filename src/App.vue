@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useUserStore } from "@/store/user";
 
+const userStore = useUserStore();
+
+const { getLoginUser } = userStore;
 const route = useRoute();
 
 const layout = computed(() => route.meta.layout);
@@ -11,6 +15,7 @@ const layout = computed(() => route.meta.layout);
  */
 const doInit = () => {
   console.log("init");
+  getLoginUser();
 };
 
 onMounted(() => {

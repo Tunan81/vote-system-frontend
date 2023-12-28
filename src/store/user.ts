@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import AccessEnum from "@/access/accessEnum";
-import { UserControllerService } from "../generated/services/UserControllerService";
+import { UserControllerService } from "@/generated";
 import { ref } from "vue";
 
 export const useUserStore = defineStore("user", () => {

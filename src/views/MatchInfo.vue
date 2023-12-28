@@ -2,7 +2,11 @@
 import { useRouter } from "vue-router";
 import message from "@arco-design/web-vue/es/message";
 import { onMounted, ref } from "vue";
-import { MatchInfoControllerService } from "@/generated";
+import { useUserStore } from "@/store/user";
+import { storeToRefs } from "pinia";
+import { MatchInfoControllerService, Voting } from "@/generated";
+import { VotingControllerService } from "../../generated";
+import access_Enum from "@/access/accessEnum";
 
 const router = useRouter();
 
@@ -10,12 +14,19 @@ const competitionId = router.currentRoute.value.query.competitionId;
 
 const dataList = ref([]);
 
+const userStore = useUserStore();
+// 获取用户信息
+const { loginUser } = storeToRefs(userStore);
+
 const loadData = async () => {
   const res = await MatchInfoControllerService.listMatchInfoPageUsingPost({
     competitionId: competitionId as any,
   });
   if (res.code === 0) {
-    dataList.value = res.data.records;
+    dataList.value = res.data.records.map((data: any) => ({
+      ...data,
+      voted: false, // 添加一个 voted 属性，默认为 false
+    }));
   } else {
     message.error("获取数据失败" + res.message);
   }
@@ -23,6 +34,46 @@ const loadData = async () => {
 onMounted(() => {
   loadData();
 });
+
+const doVote1 = async (contestantId: any, index: number) => {
+  // 先判断是否登录
+  if (loginUser.value.userRole == access_Enum.NOT_LOGIN) {
+    message.error("请先登录");
+    router.push({
+      path: "/user/login",
+      replace: true,
+    });
+    return;
+  }
+  const form = ref({
+    contestantId: contestantId as any,
+    userId: loginUser.value.id as any,
+  });
+  const res = await VotingControllerService.addVoteUsingPost(form.value);
+  if (res.code === 0) {
+    (dataList.value as any[])[index].voted = true;
+    message.success("投票成功");
+  } else {
+    message.error("投票失败" + res.message);
+  }
+};
+
+const doVote2 = async (contestantId: any, index: number) => {
+  const form = {
+    competitionId: competitionId as any,
+    contestantId: contestantId as any,
+    userId: loginUser.value.userId as any,
+  } as Voting;
+  const res = await VotingControllerService.addVoteUsingPost({
+    voting: form,
+  });
+  if (res.code === 0) {
+    (dataList.value as any[])[index].voted = true;
+    message.success("投票成功");
+  } else {
+    message.error("投票失败" + res.message);
+  }
+};
 </script>
 
 <template>
@@ -30,10 +81,7 @@ onMounted(() => {
     <h1>无际之旅的旋律</h1>
     <a-scrollbar style="height: 800px; overflow: auto">
       <div class="matchInfo">
-        <template
-          v-if="dataList && dataList.length > 0"
-          style="max-height: 500px"
-        >
+        <template v-if="dataList && dataList.length > 0">
           <div
             v-for="(data, index) in dataList"
             :key="index"
@@ -41,7 +89,12 @@ onMounted(() => {
           >
             <a-card :style="{ width: '360px' }">
               <template #actions>
-                <a-button type="text" status="success">
+                <a-button
+                  type="text"
+                  status="success"
+                  @click="doVote1(data.contestant1Id)"
+                  :disabled="data.voted"
+                >
                   <template #icon>
                     <icon-heart-fill style="font-size: 28px" />
                   </template>
@@ -94,7 +147,12 @@ onMounted(() => {
             </div>
             <a-card :style="{ width: '360px' }">
               <template #actions>
-                <a-button type="text" status="success">
+                <a-button
+                  type="text"
+                  status="success"
+                  @click="doVote2(data.contestant2Id)"
+                  :disabled="data.voted"
+                >
                   <template #icon>
                     <icon-heart-fill style="font-size: 28px" />
                   </template>

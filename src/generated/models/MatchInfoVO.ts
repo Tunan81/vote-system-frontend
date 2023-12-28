@@ -5,10 +5,10 @@
 
 export type MatchInfoVO = {
     competitionId?: number;
-    contestName2?: string;
     contestant1Id?: number;
     contestant1Song?: string;
     contestant2Id?: number;
     contestant2Song?: string;
     contestantName1?: string;
+    contestantName2?: string;
 };

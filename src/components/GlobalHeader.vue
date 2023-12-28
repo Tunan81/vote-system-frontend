@@ -92,6 +92,7 @@ const visibleRoutes = computed(() => {
     if (item.meta?.hideInMenu) {
       return false;
     }
+    console.log(111);
     return checkAccess(loginUser.value, item?.meta?.access as string);
   });
 });
