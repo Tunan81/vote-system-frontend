@@ -77,7 +77,7 @@ const columns = [
   },
   {
     title: "是否开始投票",
-    dataIndex: "isVotingOpen",
+    slotName: "isVotingOpen",
   },
   {
     title: "是否开始比赛对战",
@@ -259,6 +259,21 @@ const doChangeMatch = (record: any) => {
   });
 };
 
+const doChangeVotingOpen = (record: any) => {
+  const req: CompetitionReq = {
+    ...record,
+  };
+  console.log(req);
+  CompetitionControllerService.updateCompetitionUsingPost(req).then((res) => {
+    if (res.code === 0) {
+      message.success("更新成功");
+      loadData();
+    } else {
+      message.error("更新失败" + res.message);
+    }
+  });
+};
+
 const doSelectMatch = (record: any) => {
   router.push({
     path: "/matchInfo",
@@ -307,6 +322,12 @@ const doSelectMatch = (record: any) => {
         }"
         @page-change="onPageChange"
       >
+        <template #isVotingOpen="{ record }">
+          <a-switch
+            v-model="record.isVotingOpen"
+            @click="doChangeVotingOpen(record)"
+          />
+        </template>
         <template #isMatchOpen="{ record }">
           <a-switch
             v-model="record.isMatchOpen"

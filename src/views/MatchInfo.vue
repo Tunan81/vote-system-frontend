@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import message from "@arco-design/web-vue/es/message";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useUserStore } from "@/store/user";
 import { storeToRefs } from "pinia";
 import { MatchInfoControllerService, Voting } from "@/generated";
@@ -17,7 +17,6 @@ const dataList = ref([]);
 const userStore = useUserStore();
 // 获取用户信息
 const { loginUser } = storeToRefs(userStore);
-
 const loadData = async () => {
   const res = await MatchInfoControllerService.listMatchInfoPageUsingPost({
     competitionId: competitionId as any,
@@ -25,7 +24,6 @@ const loadData = async () => {
   if (res.code === 0) {
     dataList.value = res.data.records.map((data: any) => ({
       ...data,
-      voted: false, // 添加一个 voted 属性，默认为 false
     }));
   } else {
     message.error("获取数据失败" + res.message);
@@ -51,7 +49,6 @@ const doVote1 = async (contestantId: any, index: number) => {
   });
   const res = await VotingControllerService.addVoteUsingPost(form.value);
   if (res.code === 0) {
-    (dataList.value as any[])[index].voted = true;
     message.success("投票成功");
   } else {
     message.error("投票失败" + res.message);
@@ -59,16 +56,21 @@ const doVote1 = async (contestantId: any, index: number) => {
 };
 
 const doVote2 = async (contestantId: any, index: number) => {
-  const form = {
-    competitionId: competitionId as any,
+  // 先判断是否登录
+  if (loginUser.value.userRole == access_Enum.NOT_LOGIN) {
+    message.error("请先登录");
+    router.push({
+      path: "/user/login",
+      replace: true,
+    });
+    return;
+  }
+  const form = ref({
     contestantId: contestantId as any,
-    userId: loginUser.value.userId as any,
-  } as Voting;
-  const res = await VotingControllerService.addVoteUsingPost({
-    ...form,
+    userId: loginUser.value.id as any,
   });
+  const res = await VotingControllerService.addVoteUsingPost(form.value);
   if (res.code === 0) {
-    (dataList.value as any[])[index].voted = true;
     message.success("投票成功");
   } else {
     message.error("投票失败" + res.message);
@@ -78,7 +80,7 @@ const doVote2 = async (contestantId: any, index: number) => {
 
 <template>
   <div id="matchManage">
-    <h1>无际之旅的旋律</h1>
+    <h1>交响入梦 尘世华章</h1>
     <a-scrollbar style="height: 800px; overflow: auto">
       <div class="matchInfo">
         <template v-if="dataList && dataList.length > 0">
@@ -222,7 +224,7 @@ h1 {
 
 .matchInfo {
   position: absolute;
-  top: 100%;
+  top: 500vh;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -232,6 +234,6 @@ h1 {
   justify-content: space-between; /* 保持卡片间隔 */
   width: 1080px; /* 根据卡片宽度和间距调整容器宽度 */
   margin: 0 auto; /* 居中显示 */
-  margin-bottom: 30vh;
+  margin-bottom: 25vh;
 }
 </style>

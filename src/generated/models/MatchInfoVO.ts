@@ -4,11 +4,11 @@
 /* eslint-disable */
 
 export type MatchInfoVO = {
-    competitionId?: number;
-    contestant1Id?: number;
-    contestant1Song?: string;
-    contestant2Id?: number;
-    contestant2Song?: string;
-    contestantName1?: string;
-    contestantName2?: string;
+  competitionId?: number | any;
+  contestant1Id?: number | any;
+  contestant1Song?: string | any;
+  contestant2Id?: number | any;
+  contestant2Song?: string | any;
+  contestantName1?: string | any;
+  contestantName2?: string | any;
 };
