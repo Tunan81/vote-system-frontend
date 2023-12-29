@@ -7,6 +7,8 @@ import { storeToRefs } from "pinia";
 import { MatchInfoControllerService, Voting } from "@/generated";
 import { VotingControllerService } from "../generated";
 import access_Enum from "@/access/accessEnum";
+// @ts-ignore
+import confetti from "canvas-confetti";
 
 const router = useRouter();
 
@@ -49,6 +51,28 @@ const doVote1 = async (contestantId: any, index: number) => {
   });
   const res = await VotingControllerService.addVoteUsingPost(form.value);
   if (res.code === 0) {
+    var end = Date.now() + 5 * 1000;
+    // go Buckeyes!
+    var colors = ["#d41919", "#f0f7f6"];
+    (function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors,
+      });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
     message.success("投票成功");
   } else {
     message.error("投票失败" + res.message);
@@ -71,6 +95,28 @@ const doVote2 = async (contestantId: any, index: number) => {
   });
   const res = await VotingControllerService.addVoteUsingPost(form.value);
   if (res.code === 0) {
+    var end = Date.now() + 5 * 1000;
+    // go Buckeyes!
+    var colors = ["#d41919", "#f5f1f1"];
+    (function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors,
+      });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
     message.success("投票成功");
   } else {
     message.error("投票失败" + res.message);
