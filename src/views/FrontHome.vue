@@ -48,7 +48,7 @@ const toMatchInfo = (id: number) => {
   });
 };
 </script>
-<style>
+<style scoped>
 #home {
   background: linear-gradient(#c4eac4, transparent),
     linear-gradient(90deg, #a1cade, transparent),

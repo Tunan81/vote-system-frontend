@@ -10,4 +10,5 @@ export type Result_Page_MatchInfoVO_ = {
     data?: Page_MatchInfoVO_;
     message?: string;
     success?: boolean;
+    voted?: boolean; // 添加 voted 属性
 };

@@ -14,7 +14,7 @@ const total = ref(0);
 const searchParams = ref({
   pageSize: 10,
   pageNumber: 1,
-  userAccount: "",
+  competitionName: "",
 });
 
 const doSubmit = () => {
@@ -28,7 +28,7 @@ const doReset = () => {
   searchParams.value = {
     pageSize: 10,
     pageNumber: 1,
-    userAccount: "",
+    competitionName: "",
   };
 };
 
@@ -127,7 +127,7 @@ const handleOk = async () => {
       Message.error("添加失败" + res.message);
     }
   } else {
-    console.log(1);
+    //todo 修改未暂未实现
   }
 
   // 清空表单
@@ -263,7 +263,6 @@ const doChangeVotingOpen = (record: any) => {
   const req: CompetitionReq = {
     ...record,
   };
-  console.log(req);
   CompetitionControllerService.updateCompetitionUsingPost(req).then((res) => {
     if (res.code === 0) {
       message.success("更新成功");
@@ -292,7 +291,7 @@ const doSelectMatch = (record: any) => {
           :style="{ width: '300px' }"
           placeholder="请输入比赛名称"
           search-button
-          v-model="searchParams.userAccount"
+          v-model="searchParams.competitionName"
           @search="doSubmit"
         >
           <template #button-icon>

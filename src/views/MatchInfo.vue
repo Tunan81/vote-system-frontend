@@ -4,7 +4,11 @@ import message from "@arco-design/web-vue/es/message";
 import { computed, onMounted, ref, watch } from "vue";
 import { useUserStore } from "@/store/user";
 import { storeToRefs } from "pinia";
-import { MatchInfoControllerService, Voting } from "@/generated";
+import {
+  MatchInfoControllerService,
+  Result_Page_MatchInfoVO_,
+  Voting,
+} from "@/generated";
 import { VotingControllerService } from "../generated";
 import access_Enum from "@/access/accessEnum";
 // @ts-ignore
@@ -14,7 +18,7 @@ const router = useRouter();
 
 const competitionId = router.currentRoute.value.query.competitionId;
 
-const dataList = ref([]);
+const dataList = ref<Result_Page_MatchInfoVO_[]>([]);
 
 const userStore = useUserStore();
 // 获取用户信息
@@ -26,6 +30,8 @@ const loadData = async () => {
   if (res.code === 0) {
     dataList.value = res.data.records.map((data: any) => ({
       ...data,
+      // todo 如果用户刷新页面按钮状态禁用状态消失，不能限制只能给一个人投票（bug）但是能跑 dog
+      voted: false, // 添加一个字段标识用户是否已经投过票，默认为 false
     }));
   } else {
     message.error("获取数据失败" + res.message);
@@ -35,7 +41,7 @@ onMounted(() => {
   loadData();
 });
 
-const doVote1 = async (contestantId: any, index: number) => {
+const doVote1 = async (contestantId: any, data: any) => {
   // 先判断是否登录
   if (loginUser.value.userRole == access_Enum.NOT_LOGIN) {
     message.error("请先登录");
@@ -51,6 +57,7 @@ const doVote1 = async (contestantId: any, index: number) => {
   });
   const res = await VotingControllerService.addVoteUsingPost(form.value);
   if (res.code === 0) {
+    data.voted = true;
     var end = Date.now() + 5 * 1000;
     // go Buckeyes!
     var colors = ["#d41919", "#f0f7f6"];
@@ -79,7 +86,7 @@ const doVote1 = async (contestantId: any, index: number) => {
   }
 };
 
-const doVote2 = async (contestantId: any, index: number) => {
+const doVote2 = async (contestantId: any, data: any) => {
   // 先判断是否登录
   if (loginUser.value.userRole == access_Enum.NOT_LOGIN) {
     message.error("请先登录");
@@ -95,6 +102,7 @@ const doVote2 = async (contestantId: any, index: number) => {
   });
   const res = await VotingControllerService.addVoteUsingPost(form.value);
   if (res.code === 0) {
+    data.voted = true;
     var end = Date.now() + 5 * 1000;
     // go Buckeyes!
     var colors = ["#d41919", "#f5f1f1"];
@@ -140,7 +148,7 @@ const doVote2 = async (contestantId: any, index: number) => {
                 <a-button
                   type="text"
                   status="success"
-                  @click="doVote1(data.contestant1Id)"
+                  @click="doVote1(data.contestant1Id, data)"
                   :disabled="data.voted"
                 >
                   <template #icon>
@@ -198,7 +206,7 @@ const doVote2 = async (contestantId: any, index: number) => {
                 <a-button
                   type="text"
                   status="success"
-                  @click="doVote2(data.contestant2Id)"
+                  @click="doVote2(data.contestant2Id, data)"
                   :disabled="data.voted"
                 >
                   <template #icon>
@@ -270,7 +278,7 @@ h1 {
 
 .matchInfo {
   position: absolute;
-  top: 500vh;
+  top: 1025vh;
   left: 50%;
   transform: translate(-50%, -50%);
 }

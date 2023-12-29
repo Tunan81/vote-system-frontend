@@ -1,13 +1,13 @@
 import axios from "axios";
-import { OpenAPI } from "@/generated";
-
-OpenAPI.WITH_CREDENTIALS = true;
-const baseUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:8101"
-    : "http://localhost:8101";
-OpenAPI.BASE = baseUrl;
-console.log("当前环境：", process.env.NODE_ENV, "请求地址", baseUrl);
+// import { OpenAPI } from "@/generated";
+//
+// OpenAPI.WITH_CREDENTIALS = true;
+// const baseUrl =
+//   process.env.NODE_ENV === "development"
+//     ? "http://localhost:8101"
+//     : "http://localhost:8101";
+// OpenAPI.BASE = baseUrl;
+// console.log("当前环境：", process.env.NODE_ENV, "请求地址", baseUrl);
 
 /**
  * 全局响应拦截器
