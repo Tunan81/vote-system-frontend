@@ -64,10 +64,20 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: "/matchInfo",
     name: "对战信息",
-    component: () => import("@/views/MatchInfo.vue"),
+    component: () => import("@/views/match/MatchInfo.vue"),
     meta: {
       hideInMenu: true,
       layout: MatchLayout,
+    },
+  },
+  {
+    path: "/matchManage",
+    name: "对战管理",
+    component: () => import("@/views/match/MatchManageView.vue"),
+    meta: {
+      hideInMenu: true,
+      layout: BasicLayout,
+      access: AccessEnum.ADMIN,
     },
   },
   {

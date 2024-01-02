@@ -58,7 +58,6 @@ const form = reactive({
 const handleSubmit = async () => {
   const res = await UserControllerService.userLoginUsingPost(form);
   if (res.code === 0) {
-    console.log(3);
     await getLoginUser();
     // 登录成功，跳转到首页
     await router.push({

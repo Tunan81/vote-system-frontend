@@ -254,6 +254,7 @@ const doChangeMatch = (record: any) => {
       message.success("更新成功");
       loadData();
     } else {
+      // todo 更新失败选择器还是会显示成功
       message.error("更新失败" + res.message);
     }
   });
@@ -275,7 +276,7 @@ const doChangeVotingOpen = (record: any) => {
 
 const doSelectMatch = (record: any) => {
   router.push({
-    path: "/matchInfo",
+    path: "/matchManage",
     query: {
       competitionId: record.competitionId,
     },

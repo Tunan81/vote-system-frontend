@@ -9,7 +9,7 @@ import {
   Result_Page_MatchInfoVO_,
   Voting,
 } from "@/generated";
-import { VotingControllerService } from "../generated";
+import { VotingControllerService } from "../../generated";
 import access_Enum from "@/access/accessEnum";
 // @ts-ignore
 import confetti from "canvas-confetti";
@@ -171,7 +171,7 @@ const doVote2 = async (contestantId: any, data: any) => {
                       transform: 'translateY(-20px)',
                     }"
                     alt="dessert"
-                    src="@/assets/t1.png"
+                    src="../../assets/t1.png"
                   />
                 </div>
               </template>
@@ -198,7 +198,7 @@ const doVote2 = async (contestantId: any, data: any) => {
               <img
                 :style="{ width: '100%' }"
                 alt="dessert"
-                src="@/assets/icon-vs-red.png"
+                src="../../assets/icon-vs-red.png"
               />
             </div>
             <a-card :style="{ width: '360px' }">
@@ -229,7 +229,7 @@ const doVote2 = async (contestantId: any, data: any) => {
                       transform: 'translateY(-20px)',
                     }"
                     alt="dessert"
-                    src="@/assets/t2.png"
+                    src="../../assets/t2.png"
                   />
                 </div>
               </template>

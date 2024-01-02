@@ -6,6 +6,7 @@
           Enjoy the music and support your favorite players
         </h1>
         <ul>
+          <li v-if="data == ''">暂无进行中的比赛</li>
           <li
             v-for="(item, index) in data"
             :key="index"
