@@ -98,7 +98,14 @@ const doDelete = async (record: any) => {
 };
 
 const doChange = async (record: any) => {
-  console.log(record);
+  const res = await MatchInfoControllerService.updateMatchInfoUsingPost(record);
+  if (res.code === 0) {
+    message.success("修改成功");
+    loadData();
+  } else {
+    record.isMatchOpen = false;
+    message.error("修改失败" + res.message);
+  }
 };
 
 const onPageChange = (page: number) => {
@@ -143,6 +150,7 @@ const onPageChange = (page: number) => {
         <template #optional="{ record }">
           <a-space>
             <a-switch
+              :beforeChange="handleChangeIntercept"
               v-model="record.isMatchOpen"
               @click="doChange(record)"
             ></a-switch>

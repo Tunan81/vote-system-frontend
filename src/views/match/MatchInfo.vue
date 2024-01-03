@@ -18,21 +18,31 @@ const router = useRouter();
 
 const competitionId = router.currentRoute.value.query.competitionId;
 
-const dataList = ref<Result_Page_MatchInfoVO_[]>([]);
+const dataList = ref({
+  competitionId: "",
+  contestant1Id: "",
+  contestant1Song: "",
+  contestant2Id: "",
+  contestant2Song: "",
+  contestantName1: "",
+  contestantName2: "",
+  isMatchOpen: true,
+  matchId: null,
+  score: 0,
+  score2: 0,
+  voted: false,
+});
 
 const userStore = useUserStore();
 // 获取用户信息
 const { loginUser } = storeToRefs(userStore);
 const loadData = async () => {
-  const res = await MatchInfoControllerService.listMatchInfoPageUsingPost({
+  const res = await MatchInfoControllerService.getCurrentMatchUsingPost({
     competitionId: competitionId as any,
   });
   if (res.code === 0) {
-    dataList.value = res.data.records.map((data: any) => ({
-      ...data,
-      // todo 如果用户刷新页面按钮状态禁用状态消失，不能限制只能给一个人投票（bug）但是能跑 dog
-      voted: false, // 添加一个字段标识用户是否已经投过票，默认为 false
-    }));
+    dataList.value = res.data;
+    console.log(dataList.value);
   } else {
     message.error("获取数据失败" + res.message);
   }
@@ -134,128 +144,117 @@ const doVote2 = async (contestantId: any, data: any) => {
 
 <template>
   <div id="matchManage">
-    <h1>交响入梦 尘世华章</h1>
-    <a-scrollbar style="height: 800px; overflow: auto">
-      <div class="matchInfo">
-        <template v-if="dataList && dataList.length > 0">
-          <div
-            v-for="(data, index) in dataList"
-            :key="index"
-            class="cards-container"
+    <div class="matchInfo">
+      <a-card :style="{ width: '360px' }">
+        <template #actions>
+          <a-button
+            type="text"
+            status="success"
+            @click="doVote1(dataList.contestant1Id, dataList)"
+            :disabled="dataList.voted"
           >
-            <a-card :style="{ width: '360px' }">
-              <template #actions>
-                <a-button
-                  type="text"
-                  status="success"
-                  @click="doVote1(data.contestant1Id, data)"
-                  :disabled="data.voted"
-                >
-                  <template #icon>
-                    <icon-heart-fill style="font-size: 28px" />
-                  </template>
-                  <a style="font-size: 20px; margin-bottom: 5px">投票</a>
-                </a-button>
-              </template>
-              <template #cover>
-                <div
-                  :style="{
-                    height: '250px',
-                    overflow: 'hidden',
-                  }"
-                >
-                  <img
-                    :style="{
-                      width: '100%',
-                      height: '100%',
-                      transform: 'translateY(-20px)',
-                    }"
-                    alt="dessert"
-                    src="../../assets/t1.png"
-                  />
-                </div>
-              </template>
-              <a-card-meta :title="'演唱歌曲：' + data.contestant1Song">
-                <template #avatar>
-                  <div
-                    :style="{
-                      display: 'flex',
-                      alignItems: 'center',
-                      color: '#1D2129',
-                    }"
-                  >
-                    <a-avatar :size="64" :style="{ marginRight: '8px' }">
-                      {{ data.contestantName1 }}
-                    </a-avatar>
-                    <a-typography-text>
-                      {{ data.contestantName1 }}
-                    </a-typography-text>
-                  </div>
-                </template>
-              </a-card-meta>
-            </a-card>
-            <div :style="{ width: '360px' }">
-              <img
-                :style="{ width: '100%' }"
-                alt="dessert"
-                src="../../assets/icon-vs-red.png"
-              />
-            </div>
-            <a-card :style="{ width: '360px' }">
-              <template #actions>
-                <a-button
-                  type="text"
-                  status="success"
-                  @click="doVote2(data.contestant2Id, data)"
-                  :disabled="data.voted"
-                >
-                  <template #icon>
-                    <icon-heart-fill style="font-size: 28px" />
-                  </template>
-                  <a style="font-size: 20px; margin-bottom: 5px">投票</a>
-                </a-button>
-              </template>
-              <template #cover>
-                <div
-                  :style="{
-                    height: '250px',
-                    overflow: 'hidden',
-                  }"
-                >
-                  <img
-                    :style="{
-                      width: '100%',
-                      height: '100%',
-                      transform: 'translateY(-20px)',
-                    }"
-                    alt="dessert"
-                    src="../../assets/t2.png"
-                  />
-                </div>
-              </template>
-              <a-card-meta :title="'演唱歌曲：' + data.contestant2Song">
-                <template #avatar>
-                  <div
-                    :style="{
-                      display: 'flex',
-                      alignItems: 'center',
-                      color: '#1D2129',
-                    }"
-                  >
-                    <a-avatar :size="64" :style="{ marginRight: '8px' }">
-                      {{ data.contestantName2 }}
-                    </a-avatar>
-                    <a-typography-text>
-                      {{ data.contestantName2 }}
-                    </a-typography-text>
-                  </div>
-                </template>
-              </a-card-meta>
-            </a-card>
+            <template #icon>
+              <icon-heart-fill style="font-size: 28px" />
+            </template>
+            <a style="font-size: 20px; margin-bottom: 5px">投票</a>
+          </a-button>
+        </template>
+        <template #cover>
+          <div
+            :style="{
+              height: '250px',
+              overflow: 'hidden',
+            }"
+          >
+            <img
+              :style="{
+                width: '100%',
+                height: '100%',
+                transform: 'translateY(-20px)',
+              }"
+              alt="dessert"
+              src="../../assets/t1.png"
+            />
           </div>
         </template>
+        <a-card-meta :title="'演唱歌曲：' + dataList.contestant1Song">
+          <template #avatar>
+            <div
+              :style="{
+                display: 'flex',
+                alignItems: 'center',
+                color: '#1D2129',
+              }"
+            >
+              <a-avatar :size="64" :style="{ marginRight: '8px' }">
+                {{ dataList.contestantName1 }}
+              </a-avatar>
+              <a-typography-text>
+                {{ dataList.contestantName1 }}
+              </a-typography-text>
+            </div>
+          </template>
+        </a-card-meta>
+      </a-card>
+      <div :style="{ width: '360px' }">
+        <img
+          :style="{ width: '100%' }"
+          alt="dessert"
+          src="../../assets/icon-vs-red.png"
+        />
       </div>
-    </a-scrollbar>
+      <a-card :style="{ width: '360px' }">
+        <template #actions>
+          <a-button
+            type="text"
+            status="success"
+            @click="doVote2(dataList.contestant2Id, dataList)"
+            :disabled="dataList.voted"
+          >
+            <template #icon>
+              <icon-heart-fill style="font-size: 28px" />
+            </template>
+            <a style="font-size: 20px; margin-bottom: 5px">投票</a>
+          </a-button>
+        </template>
+        <template #cover>
+          <div
+            :style="{
+              height: '250px',
+              overflow: 'hidden',
+            }"
+          >
+            <img
+              :style="{
+                width: '100%',
+                height: '100%',
+                transform: 'translateY(-20px)',
+              }"
+              alt="dessert"
+              src="../../assets/t2.png"
+            />
+          </div>
+        </template>
+        <a-card-meta :title="'演唱歌曲：' + dataList.contestant2Song">
+          <template #avatar>
+            <div
+              :style="{
+                display: 'flex',
+                alignItems: 'center',
+                color: '#1D2129',
+              }"
+            >
+              <a-avatar :size="64" :style="{ marginRight: '8px' }">
+                {{ dataList.contestantName2 }}
+              </a-avatar>
+              <a-typography-text>
+                {{ dataList.contestantName2 }}
+              </a-typography-text>
+            </div>
+          </template>
+        </a-card-meta>
+      </a-card>
+    </div>
   </div>
 </template>
 
@@ -277,10 +276,15 @@ h1 {
 }
 
 .matchInfo {
+  display: flex;
+  justify-content: space-between; /* 保持卡片间隔 */
   position: absolute;
-  top: 1025vh;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 1080px; /* 根据卡片宽度和间距调整容器宽度 */
+  margin: 0 auto; /* 居中显示 */
+  margin-bottom: 25vh;
 }
 
 .cards-container {

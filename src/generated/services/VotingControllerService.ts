@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Result_long_ } from '../models/Result_long_';
+import type { Result_boolean_ } from '../models/Result_boolean_';
 import type { Voting } from '../models/Voting';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -14,13 +14,13 @@ export class VotingControllerService {
     /**
      * addVote
      * @param voting voting
-     * @returns Result_long_ OK
+     * @returns Result_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static addVoteUsingPost(
 voting: Voting,
-): CancelablePromise<Result_long_ | any> {
+): CancelablePromise<Result_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/voting/add',

@@ -235,7 +235,7 @@ const onPageChange = (page: number) => {
         <a-select v-model="form.userRole" placeholder="请选择角色">
           <a-option
             v-for="item of roleList"
-            :value="item"
+            :value="item.value"
             :label="item.label"
             :key="item.value"
           />

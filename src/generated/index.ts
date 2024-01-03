@@ -28,6 +28,7 @@ export type { Result_boolean_ } from './models/Result_boolean_';
 export type { Result_List_CompetitionDTO_ } from './models/Result_List_CompetitionDTO_';
 export type { Result_LoginUserVO_ } from './models/Result_LoginUserVO_';
 export type { Result_long_ } from './models/Result_long_';
+export type { Result_MatchInfoVO_ } from './models/Result_MatchInfoVO_';
 export type { Result_Page_Competition_ } from './models/Result_Page_Competition_';
 export type { Result_Page_ContestantInfo_ } from './models/Result_Page_ContestantInfo_';
 export type { Result_Page_MatchInfoVO_ } from './models/Result_Page_MatchInfoVO_';
