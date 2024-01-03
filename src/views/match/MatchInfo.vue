@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import message from "@arco-design/web-vue/es/message";
-import { computed, onMounted, ref, watch } from "vue";
+import * as echarts from "echarts";
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "vue";
 import { useUserStore } from "@/store/user";
 import { storeToRefs } from "pinia";
 import {
@@ -36,20 +44,20 @@ const dataList = ref({
 const userStore = useUserStore();
 // 获取用户信息
 const { loginUser } = storeToRefs(userStore);
+
 const loadData = async () => {
   const res = await MatchInfoControllerService.getCurrentMatchUsingPost({
     competitionId: competitionId as any,
   });
   if (res.code === 0) {
     dataList.value = res.data;
-    console.log(dataList.value);
   } else {
     message.error("获取数据失败" + res.message);
   }
 };
-onMounted(() => {
-  loadData();
-});
+
+// 定义定时任务的间隔时间（毫秒为单位）
+const intervalTime = 2000;
 
 const doVote1 = async (contestantId: any, data: any) => {
   // 先判断是否登录
@@ -140,6 +148,43 @@ const doVote2 = async (contestantId: any, data: any) => {
     message.error("投票失败" + res.message);
   }
 };
+const main = ref();
+
+function init() {
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(main.value);
+  // 指定图表的配置项和数据
+  var option = {
+    tooltip: {},
+    legend: {
+      data: ["票数"],
+    },
+    xAxis: {
+      data: ["选手1", "选手2"],
+    },
+    yAxis: {},
+    series: [
+      {
+        name: "票数",
+        type: "bar",
+        data: [dataList.value.score, dataList.value.score2],
+      },
+    ],
+  };
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+}
+
+onMounted(() => {
+  loadData();
+  init();
+  const timer = setInterval(loadData, intervalTime);
+  const timer2 = setInterval(init, intervalTime);
+  onUnmounted(() => {
+    clearInterval(timer);
+    clearInterval(timer2);
+  });
+});
 </script>
 
 <template>
@@ -255,6 +300,10 @@ const doVote2 = async (contestantId: any, data: any) => {
         </a-card-meta>
       </a-card>
     </div>
+    <div
+      ref="main"
+      style="height: 350px; max-width: 20%; margin-top: 600px; left: 40%"
+    ></div>
   </div>
 </template>
 
@@ -282,14 +331,6 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1080px; /* 根据卡片宽度和间距调整容器宽度 */
-  margin: 0 auto; /* 居中显示 */
-  margin-bottom: 25vh;
-}
-
-.cards-container {
-  display: flex;
-  justify-content: space-between; /* 保持卡片间隔 */
   width: 1080px; /* 根据卡片宽度和间距调整容器宽度 */
   margin: 0 auto; /* 居中显示 */
   margin-bottom: 25vh;
